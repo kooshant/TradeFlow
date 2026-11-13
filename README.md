@@ -1,67 +1,164 @@
 # TradeFlow – Global Trade Intelligence Platform
 
-## Overview
+TradeFlow is an end-to-end data engineering and analytics platform
+that transforms public international trade data into structured,
+validated, analytics-ready datasets.
 
-TradeFlow is an advanced data engineering platform that collects,
-processes and analyses public international trade data.
+The project currently focuses on India's 2023 imports and exports
+using official United Nations UN Comtrade data.
 
-The initial focus is on India's imports and exports.
+It demonstrates batch data ingestion, data validation, distributed
+processing with Apache Spark, Delta Lake storage, dimensional
+enrichment, analytical data modelling, and interactive visualization.
 
-## Problem Statement
+## Project Highlights
 
-International trade data is available across multiple public sources.
-However, analysing it consistently across countries, products and time
-periods requires reliable data pipelines and standardisation.
+- Processes 165,485 public trade records.
+- Covers 13,048 export records and 152,437 import records.
+- Implements Raw, Silver, Curated, Enriched, and Gold data layers.
+- Uses PySpark for large-scale data transformations.
+- Uses Delta Lake for reliable analytical storage.
+- Enriches trade records with official HS 2022 commodity and
+  partner-area reference data.
+- Builds five analytics marts for business analysis.
+- Provides an interactive Streamlit dashboard.
+- Includes automated data validation and project tests.
 
-TradeFlow aims to solve this problem through automated batch data
-pipelines and analytics-ready datasets.
+## Current Project Scope
 
-## Key Objectives
-
-- Analyse India's imports and exports.
-- Track trade trends across countries and products.
-- Identify supplier concentration and market opportunities.
-- Build reliable and repeatable batch pipelines.
-- Process large datasets using Apache Spark.
-- Create analytics-ready datasets.
+| Attribute | Value |
+|---|---|
+| Reporter | India |
+| Reporter ISO | IND |
+| Reference year | 2023 |
+| Commodity classification | HS 2022 |
+| Detailed commodity level | HS 6-digit |
+| Primary data source | UN Comtrade |
+| Processing type | Batch |
+| Raw records | 165,485 |
+| Export records | 13,048 |
+| Import records | 152,437 |
 
 ## Technology Stack
 
-- Python
-- SQL
-- Apache Spark / PySpark
-- Databricks
-- Delta Lake
-- AWS
-- Git and GitHub
-- Docker
+- **Language:** Python
+- **Data processing:** Pandas, PySpark
+- **Storage:** CSV, Parquet, Delta Lake
+- **Data source:** UN Comtrade API
+- **Reference enrichment:** HS 2022 and partner-area references
+- **Analytics:** Python, PySpark
+- **Visualization:** Streamlit, Plotly
+- **Testing:** Pytest
+- **Version control:** Git and GitHub
 
-## Data Sources
+## Architecture
 
-- India Department of Commerce – TradeStat
-- United Nations – UN Comtrade
+TradeFlow follows a layered batch data engineering architecture.
 
-## Planned Architecture
+```text
+             UN Comtrade API
+                    |
+                    v
+             Python Ingestion
+                    |
+                    v
+               RAW LAYER
+          Consolidated JSON Data
+                    |
+                    v
+              DATA VALIDATION
+                    |
+                    v
+              SILVER LAYER
+          Cleaned and Standardized
+                    |
+                    v
+             APACHE SPARK
+                    |
+                    v
+             CURATED LAYER
+                 Parquet
+                    |
+                    v
+              DELTA LAKE
+                    |
+                    v
+          REFERENCE ENRICHMENT
+          HS and Partner Dimensions
+                    |
+                    v
+                GOLD LAYER
+       +------------+------------+
+       |            |            |
+       v            v            v
+    National     Product      Import
+    Summary     Analytics    Partner
+                             Analytics
+       |            |            |
+       +------------+------------+
+                    |
+                    v
+             ANALYTICS MARTS
+                    |
+                    v
+           STREAMLIT DASHBOARD
+              + PLOTLY
 
-Public Data Sources
-        |
-        v
-Python Data Ingestion
-        |
-        v
-Bronze Layer – Raw Data
-        |
-        v
-Silver Layer – Cleaned Data
-        |
-        v
-Gold Layer – Analytics-ready Data
-        |
-        v
-SQL Analytics and Dashboard
+## Installation and Setup
 
-## Project Status
+### Prerequisites
 
-Phase 1: Environment Setup and Python Foundations
+- Python 3.12
+- Java 17
+- Git
 
-Currently under development.
+Java 17 is required for the local Apache Spark environment.
+
+### 1. Clone the repository
+
+```bash
+git clone https://github.com/kooshant/TradeFlow.git
+cd TradeFlow
+```
+
+### 2. Create a virtual environment
+
+```bash
+python3.12 -m venv .venv
+source .venv/bin/activate
+```
+
+### 3. Install dependencies
+
+```bash
+python -m pip install --upgrade pip
+pip install -r requirements-dev.txt
+```
+
+### 4. Configure environment variables
+
+Create a `.env` file in the project root:
+
+```env
+COMTRADE_API_KEY=your_comtrade_api_key
+```
+
+Replace the placeholder with your own UN Comtrade API key. Never commit your `.env` file or expose API credentials publicly.
+
+### 5. Run the dashboard
+
+After the pipelines have generated the required analytics marts, launch the dashboard:
+
+```bash
+streamlit run src/tradeflow/dashboard.py --server.port 8505
+```
+
+Open http://localhost:8505 in your browser.
+
+## Running Tests
+
+```bash
+python -m pytest -v
+```
+
+The tests cover API connectivity, analytics mart validation and dashboard loading.

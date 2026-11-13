@@ -21,3 +21,17 @@ logs/
 
 # Mac
 .DS_Store
+
+# Reference data (download using ingestion scripts)
+data/reference/
+
+# Agent/editor local configuration
+.agents/
+.claude/
+
+# Temporary and backup files
+*.save
+*.bak
+
+# Keep the example environment file in Git
+!.env.example
