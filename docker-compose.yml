@@ -1,0 +1,21 @@
+services:
+  tradeflow-dashboard:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: tradeflow-dashboard
+    ports:
+      - "8501:8501"
+    volumes:
+      - ./data/processed/analytics:/app/data/processed/analytics:ro
+    restart: unless-stopped
+    healthcheck:
+      test:
+        - CMD
+        - python
+        - -c
+        - "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8501/_stcore/health')"
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 20s
