@@ -13,7 +13,11 @@ venv/
 
 # Data
 data/raw/
-data/processed/
+data/processed/*
+
+# Public dashboard analytics datasets
+!data/processed/analytics/
+!data/processed/analytics/**
 
 # Logs
 logs/
@@ -35,3 +39,7 @@ data/reference/
 
 # Keep the example environment file in Git
 !.env.example
+
+# Ignore Spark-generated metadata in public analytics data
+data/processed/analytics/**/.* 
+data/processed/analytics/**/_SUCCESS
